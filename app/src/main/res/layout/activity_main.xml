@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tvQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/rounded_flashcard_q"
+        android:elevation="20dp"
+        android:gravity="center"
+        android:text="What is Anthony's favorite type of salad dressing?"
+        android:textColor="#EEE1B3"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/tvAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/rounded_flashcard_a"
+        android:elevation="20dp"
+        android:gravity="center"
+        android:text="Balsamic"
+        android:textColor="#22221D"
+        android:textSize="40sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/tvChoice1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvQuestion"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#E99999"
+        android:gravity="center"
+        android:text="Italian"
+        android:textColor="#FF000000"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/tvChoice2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvChoice1"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#E99999"
+        android:gravity="center"
+        android:text="Balsamic"
+        android:textColor="#FF000000"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/tvChoice3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvChoice2"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#E99999"
+        android:gravity="center"
+        android:text="Caesar"
+        android:textColor="#FF000000"
+        android:textSize="30dp" />
+
+    <ImageButton
+        android:id="@+id/btnHide"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/ic_eye"
+        tools:layout_marginBottom="10dp" />
+
+</RelativeLayout>
