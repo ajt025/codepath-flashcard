@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddCardActivity">
+
+    <ImageButton
+        android:id="@+id/btnCancel"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/ic_close_circle" />
+
+    <ImageButton
+        android:id="@+id/btnSave"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/ic_save_24px" />
+
+    <EditText
+        android:id="@+id/etQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:hint="Question"
+        android:text="" />
+
+    <EditText
+        android:id="@+id/etAnswer1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etQuestion"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:hint="Answer #1"
+        android:text="" />
+
+    <EditText
+        android:id="@+id/etAnswer2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etAnswer1"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:hint="Answer #2"
+        android:text="" />
+
+    <EditText
+        android:id="@+id/etAnswer3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etAnswer2"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:hint="Answer #3"
+        android:text="" />
+
+    <RadioGroup
+        android:id="@+id/rgAnswers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etAnswer3"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:checkedButton="@id/rbAnswer1">
+
+        <RadioButton
+            android:id="@+id/rbAnswer1"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="1" />
+
+        <RadioButton
+            android:id="@+id/rbAnswer2"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="2" />
+
+        <RadioButton
+            android:id="@+id/rbAnswer3"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="3" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tvAnswerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/rgAnswers"
+        android:layout_alignBottom="@+id/rgAnswers"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="50dp"
+        android:layout_toEndOf="@+id/rgAnswers"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Correct Answer"
+        android:textStyle="bold" />
+
+</RelativeLayout>

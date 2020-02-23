@@ -1,12 +1,16 @@
 package com.example.flashcard;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -17,12 +21,14 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView tvQuestion;
     private TextView tvAnswer;
-
     private TextView[] choices = new TextView[3];
+    private ImageButton btnAdd;
     private ImageButton btnHide;
+    private ImageButton btnEdit;
 
     // other fields
     private boolean isShowingAnswers = true;
+    private int correctIndex = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
         choices[0] = findViewById(R.id.tvChoice1);
         choices[1] = findViewById(R.id.tvChoice2);
         choices[2] = findViewById(R.id.tvChoice3);
+        btnAdd = findViewById(R.id.btnAdd);
         btnHide = findViewById(R.id.btnHide);
+        btnEdit = findViewById(R.id.btnEdit);
 
-        // Setup listeners
+        // LISTENER SETUP
         rlMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // toggle visibility of question and answer cards
         tvQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,15 +86,24 @@ public class MainActivity extends AppCompatActivity {
                     view.setBackgroundColor(getResources().getColor(R.color.incorrectAnswer));
 
                 // hardcode for example
-                choices[1].setBackgroundColor(getResources().getColor(R.color.correctAnswer));
+                choices[correctIndex].setBackgroundColor(getResources().getColor(R.color.correctAnswer));
             }
         };
-
         // Assign checker to each TextView choices
         for (int i = 0; i < choices.length; ++i) {
             choices[i].setOnClickListener(correctCheck);
         }
 
+        // Send to AddCard screen with no prior data
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, AddCardActivity.class);
+                startActivityForResult(i, 100);
+            }
+        });
+
+        // Hide and show answers, updates the icon's drawable
         btnHide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,6 +115,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Pass current data to AddCard activity for autopopulation
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, AddCardActivity.class);
+                i.putExtra("question", tvQuestion.getText().toString());
+                i.putExtra("answer1", choices[0].getText().toString());
+                i.putExtra("answer2", choices[1].getText().toString());
+                i.putExtra("answer3", choices[2].getText().toString());
+                i.putExtra("correctIndex", correctIndex);
+                startActivityForResult(i, 100);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == 100) { // AddCardActivity
+            if (data != null) {
+                tvQuestion.setText(data.getStringExtra("question"));
+
+                for (int i = 0; i < choices.length; ++i) {
+                    choices[i].setText(data.getStringExtra("answer" + (i + 1))); // for offset
+                }
+
+                correctIndex = data.getIntExtra("correctIndex", 0);
+                tvAnswer.setText(choices[correctIndex].getText());
+
+                Snackbar.make(findViewById(R.id.tvQuestion),
+                        "Successfully saved",
+                        Snackbar.LENGTH_SHORT)
+                .show();
+            }
+        }
     }
 
     // helper methods
