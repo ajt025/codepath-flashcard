@@ -18,7 +18,6 @@
         android:background="@drawable/rounded_flashcard_q"
         android:elevation="20dp"
         android:gravity="center"
-        android:text="What is Anthony's favorite type of salad dressing?"
         android:textColor="#EEE1B3"
         android:textSize="40sp" />
 
@@ -33,7 +32,6 @@
         android:background="@drawable/rounded_flashcard_a"
         android:elevation="20dp"
         android:gravity="center"
-        android:text="Balsamic"
         android:textColor="#22221D"
         android:textSize="40sp"
         android:visibility="invisible" />
@@ -49,7 +47,6 @@
         android:layout_marginBottom="10dp"
         android:background="#E99999"
         android:gravity="center"
-        android:text="Italian"
         android:textColor="#FF000000"
         android:textSize="30dp" />
 
@@ -64,7 +61,6 @@
         android:layout_marginBottom="10dp"
         android:background="#E99999"
         android:gravity="center"
-        android:text="Balsamic"
         android:textColor="#FF000000"
         android:textSize="30dp" />
 
@@ -79,7 +75,6 @@
         android:layout_marginBottom="10dp"
         android:background="#E99999"
         android:gravity="center"
-        android:text="Caesar"
         android:textColor="#FF000000"
         android:textSize="30dp" />
 
@@ -118,5 +113,40 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/ic_pencil" />
+
+    <ImageView
+        android:id="@+id/ivNext"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/tvChoice3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@drawable/ic_arrow_forward_24px" />
+
+    <ImageView
+        android:id="@+id/ivDelete"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        app:srcCompat="@drawable/ic_delete_24px" />
+
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ivNext"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="No flashcards found"
+        android:textColor="#7A7A7A"
+        android:textSize="30sp"
+        android:visibility="gone" />
 
 </RelativeLayout>

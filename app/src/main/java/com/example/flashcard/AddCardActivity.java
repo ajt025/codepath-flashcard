@@ -74,7 +74,7 @@ public class AddCardActivity extends AppCompatActivity {
                     data.putExtra("answer2", answer2);
                     data.putExtra("answer3", answer3);
                     data.putExtra("correctIndex", correctIndex - 1); // standard: only pass 0-based values
-                    setResult(100, data);
+                    setResult(RESULT_OK, data);
                     finish();
                 } else {
                     Toast.makeText(AddCardActivity.this,
