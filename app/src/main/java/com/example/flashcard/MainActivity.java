@@ -3,15 +3,21 @@ package com.example.flashcard;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvAnswer;
     private TextView[] choices = new TextView[3];
     private TextView tvEmpty;
+    private TextView tvTimer;
     private ImageButton btnAdd;
     private ImageButton btnHide;
     private ImageButton btnEdit;
@@ -52,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private Flashcard cardToEdit;
 
     private Random random;
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +79,30 @@ public class MainActivity extends AppCompatActivity {
         choices[1] = findViewById(R.id.tvChoice2);
         choices[2] = findViewById(R.id.tvChoice3);
         tvEmpty = findViewById(R.id.tvEmpty);
+        tvTimer = findViewById(R.id.tvTimer);
         btnAdd = findViewById(R.id.btnAdd);
         btnHide = findViewById(R.id.btnHide);
         btnEdit = findViewById(R.id.btnEdit);
         ivNext = findViewById(R.id.ivNext);
         ivDelete = findViewById(R.id.ivDelete);
+
+        // Countdown setup
+        countDownTimer = new CountDownTimer(16000, 1000) {
+            @Override
+            public void onTick(long l) {
+                tvTimer.setText(String.valueOf(l / 1000));
+            }
+
+            @Override
+            public void onFinish() {
+                tvTimer.setText("X");
+            }
+        };
+        startTimer();
+
+        // Animations
+        final Animation leftOutAnim = AnimationUtils.loadAnimation(this.getApplicationContext(), R.anim.left_out);
+        final Animation rightInAnim = AnimationUtils.loadAnimation(this.getApplicationContext(), R.anim.right_in);
 
         if (allFlashcards != null && allFlashcards.size() > 0) {
             ((TextView) findViewById(R.id.tvQuestion)).setText(allFlashcards.get(currentFlashcard).getQuestion());
@@ -109,17 +136,71 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Flip card
-                tvQuestion.setVisibility(View.INVISIBLE);
-                tvAnswer.setVisibility(View.VISIBLE);
+
+                    /* CODE FOR CIRCULAR REVEAL */
+//                // get the center for the clipping circle
+//                int cx = tvAnswer.getWidth() / 2;
+//                int cy = tvAnswer.getHeight() / 2;
+//
+//                // get the final radius for the clipping circle
+//                float finalRadius = (float) Math.hypot(cx, cy);
+//
+//                // create the animator for this view (the start radius is zero)
+//                Animator anim = ViewAnimationUtils.createCircularReveal(tvAnswer, cx, cy, 0f, finalRadius);
+//
+//                // hide the question and show the answer to prepare for playing the animation!
+//                tvQuestion.setVisibility(View.INVISIBLE);
+//                tvAnswer.setVisibility(View.VISIBLE);
+//
+//                anim.setDuration(1000);
+//                anim.start();
+
+                // Camera fixing
+                tvQuestion.setCameraDistance(5000);
+                tvAnswer.setCameraDistance(5000);
+
+                tvQuestion.animate()
+                        .rotationY(90)
+                        .setDuration(200)
+                        .withEndAction(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        tvQuestion.setVisibility(View.INVISIBLE);
+                                        tvAnswer.setVisibility(View.VISIBLE);
+                                        // second quarter turn
+                                        tvAnswer.setRotationY(-90);
+                                        tvAnswer.animate()
+                                                .rotationY(0)
+                                                .setDuration(200)
+                                                .start();
+                                    }
+                                }
+                        ).start();
             }
         });
 
         tvAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Flip card
-                tvQuestion.setVisibility(View.VISIBLE);
-                tvAnswer.setVisibility(View.INVISIBLE);
+                tvAnswer.animate()
+                        .rotationY(90)
+                        .setDuration(200)
+                        .withEndAction(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        tvAnswer.setVisibility(View.INVISIBLE);
+                                        tvQuestion.setVisibility(View.VISIBLE);
+                                        // second quarter turn
+                                        tvQuestion.setRotationY(-90);
+                                        tvQuestion.animate()
+                                                .rotationY(0)
+                                                .setDuration(200)
+                                                .start();
+                                    }
+                                }
+                        ).start();
             }
         });
 
@@ -127,9 +208,12 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener correctCheck = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((TextView) view).getText().equals(tvAnswer.getText()))
+                if (((TextView) view).getText().equals(tvAnswer.getText())) {
                     view.setBackgroundColor(getResources().getColor(R.color.correctAnswer));
-                else
+                    new ParticleSystem(MainActivity.this, 100, R.drawable.confetti, 3000)
+                            .setSpeedRange(0.2f, 0.5f)
+                            .oneShot(view, 100);
+                } else
                     view.setBackgroundColor(getResources().getColor(R.color.incorrectAnswer));
 
                 // hardcode for example
@@ -147,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, AddCardActivity.class);
                 startActivityForResult(i, ADD_CARD_REQ_CODE);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         });
 
@@ -176,37 +261,15 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra("answer3", choices[2].getText().toString());
                 i.putExtra("correctIndex", correctIndex);
                 startActivityForResult(i, EDIT_CARD_REQ_CODE);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         });
 
         ivNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                allFlashcards = flashcardDatabase.getAllCards();
-
-                if (allFlashcards.size() == 0)
-                    return;
-
-                currentFlashcard = random.nextInt(allFlashcards.size());
-
-                if (allFlashcards != null && allFlashcards.size() > 0) {
-                    ((TextView) findViewById(R.id.tvQuestion)).setText(allFlashcards.get(currentFlashcard).getQuestion());
-                    ((TextView) findViewById(R.id.tvAnswer)).setText(allFlashcards.get(currentFlashcard).getAnswer());
-
-                    setupChoices();
-                }
-
-                // Swap visibility upon clicking
-                if (tvAnswer.getVisibility() == View.VISIBLE) {
-                    // Flip card
-                    tvQuestion.setVisibility(View.VISIBLE);
-                    tvAnswer.setVisibility(View.INVISIBLE);
-                }
-
-                // Clear choices upon clicking next
-                for (int i = 0; i < choices.length; ++i) {
-                    choices[i].setBackgroundColor(getResources().getColor(R.color.choice));
-                }
+                tvQuestion.startAnimation(leftOutAnim);
+                // leftOutAnim handles the rest of question/answer update logic
             }
         });
 
@@ -240,6 +303,70 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Animation Listeners
+        leftOutAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                // this method is called when the animation first starts
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                allFlashcards = flashcardDatabase.getAllCards();
+
+                if (allFlashcards.size() == 0)
+                    return;
+
+                currentFlashcard = random.nextInt(allFlashcards.size());
+
+                if (allFlashcards != null && allFlashcards.size() > 0) {
+                    ((TextView) findViewById(R.id.tvQuestion)).setText(allFlashcards.get(currentFlashcard).getQuestion());
+                    ((TextView) findViewById(R.id.tvAnswer)).setText(allFlashcards.get(currentFlashcard).getAnswer());
+
+                    setupChoices();
+                }
+
+                // Swap visibility upon clicking
+                if (tvAnswer.getVisibility() == View.VISIBLE) {
+                    // Flip card
+                    tvQuestion.setVisibility(View.VISIBLE);
+                    tvAnswer.setVisibility(View.INVISIBLE);
+                }
+
+                // Clear choices upon clicking next
+                for (int i = 0; i < choices.length; ++i) {
+                    choices[i].setBackgroundColor(getResources().getColor(R.color.choice));
+                }
+
+                // this method is called when the animation is finished playing
+                tvQuestion.startAnimation(rightInAnim);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                // we don't need to worry about this method
+            }
+        });
+
+        rightInAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                startTimer();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
     }
 
     @Override
@@ -343,6 +470,11 @@ public class MainActivity extends AppCompatActivity {
                 correctIndex = i;
             }
         }
+    }
+
+    private void startTimer() {
+        countDownTimer.cancel();
+        countDownTimer.start();
     }
 
 }

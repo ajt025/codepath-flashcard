@@ -45,3 +45,16 @@
 - [X] Flashcards are shown in random order instead of the order they were created in
 - [X] User can edit a card and see the edit saved when they browse through their deck of cards
 - [X] User can create flashcards with multiple answers and be able to browse through cards with multiple choice answers shown
+
+# Lab 4 :
+
+## Required
+- [X] User sees a transition animation when going from the main screen to the add card screen.
+- [X] User sees a reveal animation when the flashcard is tapped and the answer is shown
+- [X] User sees flashcards animating in / out when the 'next' button is tapped
+
+## Optional
+- [ ] Extra styling is added!
+- [X] User sees a countdown timer for each question
+- [X] User sees a 'card flip' animation when the card is tapped
+- [X] User sees a celebration animation with confetti when they answer a question correctly
